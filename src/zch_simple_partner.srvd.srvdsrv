@@ -1,0 +1,4 @@
+@EndUserText.label: 'Simple Partner Service'
+define service Zch_simple_partner {
+  expose ZCH_C_RAPPartner as Partner;
+}
