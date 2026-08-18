@@ -19,6 +19,8 @@ CLASS lhc_ZCH_I_RAPPartner DEFINITION INHERITING FROM cl_abap_behavior_handler.
        keys FOR ACTION Partner~fillEmptyStreets RESULT result.
     METHODS copyLine FOR MODIFY
        keys FOR ACTION Partner~copyLine.
+    METHODS withPopup FOR MODIFY
+       keys FOR ACTION Partner~withPopup.
 
 ENDCLASS.
 
@@ -168,6 +170,46 @@ CLASS lhc_ZCH_I_RAPPartner IMPLEMENTATION.
       REPORTED DATA(ls_reported).
 
     mapped-partner = ls_mapped-partner.
+  ENDMETHOD.
+
+  METHOD withPopup.
+    TRY.
+        DATA(ls_key) = keys[ 1 ].
+      CATCH cx_sy_itab_line_not_found.
+        RETURN.
+    ENDTRY.
+
+    CASE ls_key-%param-MessageType.
+      WHEN 1.
+        INSERT VALUE #(
+         %msg = new_message_with_text( severity = if_abap_behv_message=>severity-success text = 'Dummy Message' ) )
+        INTO TABLE reported-partner.
+      WHEN 2.
+        INSERT VALUE #(
+        %msg = new_message_with_text( severity = if_abap_behv_message=>severity-information text = 'Dummy Message'  ) ) INTO TABLE reported-partner.
+      WHEN 3.
+        INSERT VALUE #(
+        %msg = new_message_with_text( severity = if_abap_behv_message=>severity-warning text = 'Dummy Message' ) ) INTO TABLE reported-partner.
+      WHEN 4.
+        INSERT VALUE #(
+        %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error text = 'Dummy Message' ) ) INTO TABLE reported-partner.
+      WHEN 5.
+        INSERT VALUE #(
+           %msg = new_message_with_text( severity = if_abap_behv_message=>severity-none text = 'Dummy Message' ) ) INTO TABLE reported-partner.
+      WHEN 6.
+        reported-partner = VALUE #( ( %msg = new_message_with_text( severity = if_abap_behv_message=>severity-success text = 'Dummy Message' ) )
+                                   ( %msg = new_message_with_text( severity = if_abap_behv_message=>severity-information text = 'Dummy Message'  ) )
+
+                                 ).
+      WHEN 7.
+        reported-partner = VALUE #(
+    ( %msg = new_message_with_text( severity = if_abap_behv_message=>severity-success text = 'Dummy message' ) )
+    ( %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error text = 'Dummy message' ) )
+    ( %msg = new_message_with_text( severity = if_abap_behv_message=>severity-warning text = 'Dummy message' ) )
+    ( %msg = new_message_with_text( severity = if_abap_behv_message=>severity-information text = 'Dummy message' ) )
+
+                            ).
+    ENDCASE.
   ENDMETHOD.
 
 ENDCLASS.

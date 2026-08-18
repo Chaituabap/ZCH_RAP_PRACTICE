@@ -19,6 +19,7 @@ authorization master ( instance )
   action fillEmptyStreets result [1] $self;
   static action clearAllEmptyStreets;
   factory action copyLine [1];
+  static action withPopup parameter ZCH_I_POPUPENTITY;
 
   mapping for zch_dmo_partner
     {
