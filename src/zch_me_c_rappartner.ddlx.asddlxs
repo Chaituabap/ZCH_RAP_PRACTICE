@@ -35,8 +35,8 @@ annotate entity ZCH_C_RAPPartner
       @UI.lineItem: [
       { position: 20, importance: #MEDIUM },
       { position: 10, type: #FOR_ACTION, label: 'Fill', dataAction: 'fillEmptyStreets' },
-      { position: 20, type: #FOR_ACTION, label: 'Clear All', dataAction: 'clearAllEmptyStreets'}
-      
+      { position: 20, type: #FOR_ACTION, label: 'Clear All', dataAction: 'clearAllEmptyStreets'},
+      { position: 30, type: #FOR_ACTION, label: 'Copy Line', dataAction:'copyLine' }
       ]
       @UI.identification: [{ position: 10, qualifier: 'PARTNER_INFO' }]
       @EndUserText.label: 'Partner'
@@ -62,10 +62,12 @@ annotate entity ZCH_C_RAPPartner
       @UI.identification: [{ position : 50, qualifier: 'PARTNER_ADDRESS' }]
       @EndUserText.label: 'Ctry'
       @EndUserText.quickInfo: 'Country'
+      @Consumption.valueHelpDefinition: [{ entity:{ name:'ZCH_C_COUNTRYVH', element: 'Country' } }]
       Country;
       @UI.identification: [{ position : 60, qualifier: 'PARTNER_INFO' }]
       @EndUserText.label: 'PayCurr'
       @EndUserText.quickInfo: 'Payment Currency'
+      @Consumption.valueHelpDefinition: [{ entity :{ name:'I_CurrencyStdVH', element:'Currency'  }  }]
       PaymentCurrency;
     
 }
