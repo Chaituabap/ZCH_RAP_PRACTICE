@@ -1,3 +1,25 @@
+CLASS lsc_zch_i_rappartner DEFINITION INHERITING FROM cl_abap_behavior_saver.
+
+  PROTECTED SECTION.
+
+    METHODS adjust_numbers REDEFINITION.
+
+ENDCLASS.
+
+CLASS lsc_zch_i_rappartner IMPLEMENTATION.
+
+  METHOD adjust_numbers.
+    SELECT FROM zch_dmo_partner
+    FIELDS MAX( Partner )
+    INTO @DATA(ld_max_partner).
+    LOOP AT mapped-partner REFERENCE INTO DATA(lr_partner).
+      ld_max_partner += 1.
+      lr_partner->PartnerNumber = ld_max_partner.
+    ENDLOOP.
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS lhc_ZCH_I_RAPPartner DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
 
@@ -21,6 +43,8 @@ CLASS lhc_ZCH_I_RAPPartner DEFINITION INHERITING FROM cl_abap_behavior_handler.
        keys FOR ACTION Partner~copyLine.
     METHODS withPopup FOR MODIFY
        keys FOR ACTION Partner~withPopup.
+    METHODS get_instance_features FOR INSTANCE FEATURES
+      keys REQUEST requested_features FOR Partner RESULT result.
 
 ENDCLASS.
 
@@ -33,14 +57,14 @@ CLASS lhc_ZCH_I_RAPPartner IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD validateKeyIsFilled.
-    LOOP AT keys INTO DATA(ls_key) WHERE PartnerNumber IS INITIAL.
-      INSERT VALUE #( PartnerNumber = ls_key-PartnerNumber ) INTO TABLE failed-partner.
-
-      INSERT VALUE #(
-        PartnerNumber = ls_key-PartnerNumber
-        %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error text = 'PartnerNumber is mandatory' )
-      ) INTO TABLE reported-partner.
-    ENDLOOP.
+*    LOOP AT keys INTO DATA(ls_key) WHERE PartnerNumber IS INITIAL.
+*      INSERT VALUE #( PartnerNumber = ls_key-PartnerNumber ) INTO TABLE failed-partner.
+*
+*      INSERT VALUE #(
+*        PartnerNumber = ls_key-PartnerNumber
+*        %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error text = 'PartnerNumber is mandatory' )
+*      ) INTO TABLE reported-partner.
+*    ENDLOOP.
   ENDMETHOD.
 
   METHOD validateCoreData.
@@ -210,6 +234,22 @@ CLASS lhc_ZCH_I_RAPPartner IMPLEMENTATION.
 
                             ).
     ENDCASE.
+  ENDMETHOD.
+
+  METHOD get_instance_features.
+    IF requested_features-%action-fillEmptyStreets = if_abap_behv=>mk-on.
+        READ ENTITIES OF zch_I_RAPPartner IN LOCAL MODE
+        ENTITY Partner
+        FIELDS ( Street )
+        WITH CORRESPONDING #( keys )
+        RESULT DATA(lt_partners).
+
+        LOOP AT lt_partners INTO DATA(ls_partner) WHERE street IS NOT INITIAL.
+            INSERT VALUE #( partnernumber = ls_partner-partnernumber
+                            %action-fillemptystreets = if_abap_behv=>mk-on )
+                            INTO TABLE result.
+        ENDLOOP.
+    ENDIF.
   ENDMETHOD.
 
 ENDCLASS.
