@@ -10,5 +10,10 @@ define root view entity ZCH_C_RAPPartner
       Street,
       City,
       Country,
-      PaymentCurrency
+      PaymentCurrency,
+      LastChangedAt,
+      LastChangedBy,
+      CreatedAt,
+      CreatedBy,
+      LocalLastChangedAt
 }

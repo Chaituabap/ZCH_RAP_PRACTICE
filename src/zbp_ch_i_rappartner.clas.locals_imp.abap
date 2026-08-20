@@ -45,6 +45,8 @@ CLASS lhc_ZCH_I_RAPPartner DEFINITION INHERITING FROM cl_abap_behavior_handler.
        keys FOR ACTION Partner~withPopup.
     METHODS get_instance_features FOR INSTANCE FEATURES
       keys REQUEST requested_features FOR Partner RESULT result.
+    METHODS get_global_features FOR GLOBAL FEATURES
+      REQUEST requested_features FOR partner RESULT result.
 
 ENDCLASS.
 
@@ -249,6 +251,20 @@ CLASS lhc_ZCH_I_RAPPartner IMPLEMENTATION.
                             %action-fillemptystreets = if_abap_behv=>mk-on )
                             INTO TABLE result.
         ENDLOOP.
+    ENDIF.
+  ENDMETHOD.
+
+  METHOD get_global_features.
+    DATA(lv_user) = cl_abap_context_info=>get_user_technical_name(  ).
+    IF requested_features-%delete = if_abap_behv=>mk-on.
+        DATA(ld_deactivate) = COND #(
+            WHEN lv_user = 'CB9980006630'
+             THEN if_abap_behv=>mk-off
+            ELSE
+              if_abap_behv=>mk-on
+         ).
+
+         result-%delete = ld_deactivate.
     ENDIF.
   ENDMETHOD.
 
