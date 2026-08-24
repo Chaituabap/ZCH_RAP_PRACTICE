@@ -1,5 +1,5 @@
 managed implementation in class zbp_ch_i_rappartner unique;
-strict ( 2 );
+strict;
 with draft;
 
 define behavior for ZCH_I_RAPPartner alias Partner
