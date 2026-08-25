@@ -1,0 +1,4 @@
+@EndUserText.label: 'API Company Names'
+define service ZCH_API_COMPANY_NAMES {
+  expose ZCH_I_DmoCname as Names;
+}
