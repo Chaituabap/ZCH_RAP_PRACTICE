@@ -1,0 +1,45 @@
+managed implementation in class zbp_ch_r_rapcinvoice unique;
+strict ( 2 );
+
+define behavior for ZCH_R_RAPCInvoice alias Invoice
+persistent table zch_dmo_invoice
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  create;
+  update;
+  delete;
+  field ( readonly : update ) Document;
+  association _Position { create; }
+  mapping for zch_dmo_invoice
+    {
+      Document = document;
+      DocDate  = doc_date;
+      DocTime  = doc_time;
+      Partner  = partner;
+    }
+}
+
+define behavior for ZCH_I_RAPCPosition alias Position
+persistent table zch_dmo_position
+lock dependent by _Invoice
+authorization dependent by _Invoice
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) Document;
+  field ( readonly : update ) PositionNumber;
+  association _Invoice;
+
+  mapping for zch_dmo_position
+    {
+      Document       = document;
+      PositionNumber = pos_number;
+      Material       = material;
+      Quantity       = quantity;
+      Price          = price;
+      Currency       = currency;
+    }
+}

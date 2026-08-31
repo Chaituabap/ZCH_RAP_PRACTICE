@@ -1,0 +1,5 @@
+@EndUserText.label: 'Invocie Service Binding'
+define service ZCH_UI_RAPC_INVOICE {
+  expose ZCH_C_RAPCInvoice  as Invoice;
+  expose ZCH_C_RAPCPosition as Position;
+}
