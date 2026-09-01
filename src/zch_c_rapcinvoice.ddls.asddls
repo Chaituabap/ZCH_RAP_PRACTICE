@@ -1,9 +1,9 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Consumption View for RAP Invoice'
-@Metadata.ignorePropagatedAnnotations: true
+@Metadata.allowExtensions: true
 define root view entity ZCH_C_RAPCInvoice 
 provider contract transactional_query
-as projection on ZCH_R_RAPCINVOICE as Invoice
+as projection on ZCH_R_RAPCInvoice as Invoice
 {
     key Document,
     DocDate,

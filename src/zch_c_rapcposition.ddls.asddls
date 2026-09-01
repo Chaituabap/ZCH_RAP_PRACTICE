@@ -1,6 +1,6 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Consumption View for RAP Position'
-@Metadata.ignorePropagatedAnnotations: true
+@Metadata.allowExtensions: true
 define view entity ZCH_C_RAPCPosition 
  as projection on ZCH_I_RAPCPosition as Position
 {
