@@ -46,5 +46,6 @@ annotate entity ZCH_C_RAPCInvoice with
     lineItem: [{ position : 40  }],
     fieldGroup: [{ position: 40,qualifier: 'CONTROL_HEADER', label: 'Partner' }]}
   Partner;
-
+  @UI :{ lineItem: [{ position : 50  }]}
+  NumberOfPositions;
 }
